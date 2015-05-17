@@ -5,14 +5,14 @@ module RenderHash
   # Usage
   # User.include RenderHash
   # user.render(
-  #   :name,
-  #   {username:      :name},
-  #   {hobby:         "fishing"},
-  #   {name_with_age: ->(user){"#{user.name}(#{user.age})"}},
+  #   :name, :age,
+  #   {username: :name, hobby: "fishing"},
+  #   {name_with_age: -> (user) {"#{user.name}(#{user.age})"}},
   #   [jobs:          [:title]]
   # )
   # => {
   #   name:          "bob",
+  #   age:           20,
   #   username:      "bob",
   #   hobby:         "finishig",
   #   name_with_age: "bob(20)",
@@ -25,21 +25,25 @@ module RenderHash
   # Usage
   # RenderHash.render(user, :name, :age)
   def self.render(obj, *args)
-    args.inject({}) do |h, v|
-      case v
-      when Symbol
-        h.merge(v => obj.send(v))
-      when Hash
-        if v.first.last.is_a? Symbol
-          h.merge(v.first.first => obj.send(v.first.last))
-        elsif v.first.last.is_a? Proc
-          h.merge(v.first.first => v.first.last.call(obj))
-        else
-          h.merge(v.first.first => v.first.last)
+    args.inject({}) do |result, task|
+      result.merge(
+        case task
+        when Symbol
+          {task => obj.send(task)}
+        when Hash
+          task.inject({}) do |h, (k, v)|
+            h.merge(k =>
+              case v
+              when Symbol then obj.send(v)
+              when Proc   then v.call(obj)
+              else             v
+              end
+            )
+          end
+        when Array
+          {task[0] => obj.send(task[0]).map {|x| render(x, *task[1])}}
         end
-      when Array
-        h.merge(v[0] => obj.send(v[0]).map {|x| render(x, *v[1])})
-      end
+      )
     end
   end
 end

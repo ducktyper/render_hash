@@ -59,6 +59,10 @@ describe RenderHash do
     )
   end
 
+  it "hash can be ..." do
+    assert_equal({username: 'bob', hobby: 'fishing'}, bob.render({username: :name, hobby: "fishing"}))
+  end
+
   it "render nested hash" do
     assert_equal(
       {jobs: [{title: 'doctor'}, {title: 'driver'}]},
