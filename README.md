@@ -1,6 +1,6 @@
 # RenderHash
 
-render_hash is an alternative to .as_json in rails providing simple syntax to
+RenderHash is an alternative to .as_json in rails providing simple syntax to
 generate nested hash from any ruby object
 
 ## Installation
@@ -43,17 +43,19 @@ render custom key and value
     user.render({hobby: "fishing"}) #=> {hobby: "fishing"}
 
 hash expressions can be grouped together
+
     user.render({username: :name}, {hobby: "fishing"}) ==
     user.render({username: :name, hobby: "fishing"})
 
 render custom key and value with lambda
 
-    user.render({name_with_age: ->(user){"#{user.name}(#{user.age})"}})
-    #=> {name_with_age: "bob(20)"}
+    name_with_age = ->(user){"#{user.name}(#{user.age})"}
+    user.render({name_with_age: name_with_age}) #=> {name_with_age: "bob(20)"}
 
 render nested hash through array
 
-    user.render([jobs: [:title]]) #=> {jobs: [{title: "doctor"}]}
+    user.render([jobs: [:title]])
+    #=> {jobs: [{title: "doctor"}, {title: "driver"}]}
 
 ## Contributing
 
