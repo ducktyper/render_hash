@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Ducksan Cho"]
   spec.email         = ["ducktyper@gmail.com"]
   spec.summary       = %q{Build a hash from an object}
-  spec.description   = %q{render_hash is an alternative to .as_json in rails providing simple syntax for nested hash supporting any ruby object}
+  spec.description   = %q{render_hash is an alternative to .as_json in rails providing simple syntax to generate nested hash from any ruby object}
   spec.homepage      = ""
   spec.license       = "MIT"
 
