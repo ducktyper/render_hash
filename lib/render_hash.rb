@@ -25,6 +25,8 @@ module RenderHash
   # Usage
   # RenderHash.render(user, :name, :age)
   def self.render(obj, *args)
+    return obj.map {|x| render(x, *args)} if obj.is_a? Array
+
     args.inject({}) do |result, task|
       result.merge(
         case task

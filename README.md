@@ -30,15 +30,15 @@ or render directly
 
 ## Syntax
 
-render method
+render from methods
 
     user.render(:name, :age) #=> {name: "bob", age: 20}
 
-render method with custom key
+render from methods with a custom key
 
     user.render({username: :name}, :age) #=> {username: "bob", age: 20}
 
-render custom key and value
+render a custom key and value
 
     user.render({hobby: "fishing"}) #=> {hobby: "fishing"}
 
@@ -47,15 +47,19 @@ hash expressions can be grouped together
     user.render({username: :name}, {hobby: "fishing"}) ==
     user.render({username: :name, hobby: "fishing"})
 
-render custom key and value with lambda
+render a custom key and value with lambda
 
     name_with_age = ->(user){"#{user.name}(#{user.age})"}
     user.render({name_with_age: name_with_age}) #=> {name_with_age: "bob(20)"}
 
-render nested hash through array
+render nested hash from a method returns an array
 
     user.render([jobs: [:title]])
     #=> {jobs: [{title: "doctor"}, {title: "driver"}]}
+
+render with an array
+
+    RenderHash.render([user1, user2], :name) #=> [{name: "bob"}, {name: "tom"}]
 
 ## Contributing
 

@@ -74,4 +74,8 @@ describe RenderHash do
     assert_equal({name: 'bob'}, RenderHash.render(bob, :name))
   end
 
+  it "render with array" do
+    assert_equal([{name: 'bob'}], RenderHash.render([bob], :name))
+  end
+
 end
