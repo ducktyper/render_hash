@@ -1,4 +1,4 @@
-VERSION = "0.0.1"
+require 'render_hash/version'
 
 module RenderHash
 
