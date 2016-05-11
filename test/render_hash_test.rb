@@ -35,10 +35,6 @@ describe RenderHash do
     assert_raises(NoMethodError) {bob.render(:method_not_exist)}
   end
 
-  it "raise if nested hash method does not return array" do
-    assert_raises(NoMethodError) {bob.render(:age, [:name])}
-  end
-
   it "rename method" do
     assert_equal({username: 'bob'}, bob.render({username: :name}))
   end
@@ -63,11 +59,16 @@ describe RenderHash do
     assert_equal({username: 'bob', hobby: 'fishing'}, bob.render({username: :name, hobby: "fishing"}))
   end
 
-  it "render nested hash" do
+  it "render method in array" do
     assert_equal(
       {jobs: [{title: 'doctor'}, {title: 'driver'}]},
       bob.render([:jobs, [:title]])
     )
+  end
+
+  it "render method of method" do
+    assert_equal({:age=>20, :name=>{:upcase=>"BOB"}},
+                 bob.render(:age, [:name, :upcase]))
   end
 
   it "render from self" do

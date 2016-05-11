@@ -7,6 +7,7 @@ module RenderHash
   # user.render(
   #   :name, :age,
   #   {username: :name, hobby: "fishing"},
+  #   [:name, :upcase],
   #   {name_with_age: -> (user) {"#{user.name}(#{user.age})"}},
   #   [jobs:          [:title]]
   # )
@@ -15,6 +16,7 @@ module RenderHash
   #   age:           20,
   #   username:      "bob",
   #   hobby:         "finishig",
+  #   name:          {upcase: "BOB"},
   #   name_with_age: "bob(20)",
   #   jobs:          [{title: "doctor"}]
   # }
@@ -43,7 +45,12 @@ module RenderHash
             )
           end
         when Array
-          {task[0] => obj.send(task[0]).map {|x| render(x, *task[1])}}
+          val = obj.send(task[0])
+          if val.respond_to? :map
+            {task[0] => val.map {|x| render(x, *task[1])}}
+          else
+            {task[0] => render(val, *task[1])}
+          end
         end
       )
     end
