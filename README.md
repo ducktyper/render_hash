@@ -1,5 +1,4 @@
-# RenderHash
-
+# RenderHash [![Build Status](https://travis-ci.org/ducktyper/render_hash.svg?branch=master)](https://travis-ci.org/ducktyper/render_hash)
 RenderHash is an alternative to .as_json in rails providing simple syntax to
 generate the hash from any ruby object.
 
