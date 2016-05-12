@@ -103,7 +103,7 @@ user.render([:name, :upcase]) #=> {name: {upcase: "BOB"}}
 
 Render the method from the array
 ```ruby
-jobs = [Job.new(title: "doctor"), Job.new(title: "driver")]
+jobs = [Job.new("doctor"), Job.new("driver")]
 user = User.new("bob", 20, jobs)
 user.render([jobs: [:title]]) #=> {jobs: [{title: "doctor"}, {title: "driver"}]}
 ```
