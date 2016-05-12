@@ -1,7 +1,7 @@
 # RenderHash
 
 RenderHash is an alternative to .as_json in rails providing simple syntax to
-generate nested hash from any ruby object
+generate nested hash from any ruby object.
 
 ## Installation
 
@@ -20,46 +20,106 @@ Or install it yourself as:
     $ gem install render_hash
 
 ## Usage
-RenderHash module can be included to a class
 
-    user.render(:name, :age) #=> {name: "bob", age: 20}
+* Include the module into a class
 
-or render directly
+```ruby
+class User
+  include RenderHash
+  attr_reader :name, :age
+  def initialize(name, age)
+    @name = name
+    @age = age
+  end
+end
+user = User.new("bob", 20)
+user.render(:name) #=> {name: "bob", age: 20}
+```
 
-    RenderHash.render(user, :name, :age) #=> {name: "bob", age: 20}
+* Use the module directly
+```ruby
+class User
+  attr_reader :name, :age
+  def initialize(name, age)
+    @name = name
+    @age = age
+  end
+end
+user = User.new("bob", 20)
+RenderHash.render(user, :name, :age) #=> {name: "bob", age: 20}
+```
 
 ## Syntax
 
-render from methods
+Classes used in the examples
+```ruby
+  class User
+    include RenderHash
+    attr_reader :name, :age, :jobs
+    def initialize(name, age = nil, jobs = [])
+      @name = name
+      @age  = age
+      @jobs = jobs
+    end
+  end
+  class Job
+    attr_reader :title
+    def initialize(title)
+      @title = title
+    end
+  end
+```
 
-    user.render(:name, :age) #=> {name: "bob", age: 20}
+Render the method
+```ruby
+user = User.new("bob")
+user.render(:name) #=> {name: "bob"}
+```
 
-render from methods with a custom key
+Render the method with the custom name
+```ruby
+user = User.new("bob")
+user.render({username: :name}) #=> {username: "bob"}
+```
 
-    user.render({username: :name}, :age) #=> {username: "bob", age: 20}
+Render the custom value
+```ruby
+user = User.new("bob")
+user.render({hobby: "fishing"}) #=> {hobby: "fishing"}
+```
 
-render a custom key and value
+Render the custom function
+```ruby
+user = User.new("bob", 20)
+name_with_age = ->(user){"#{user.name}(#{user.age})"}
+user.render({name_with_age: name_with_age}) #=> {name_with_age: "bob(20)"}
+```
 
-    user.render({hobby: "fishing"}) #=> {hobby: "fishing"}
+Render nested methods
+```ruby
+user = User.new("bob")
+user.render([:name, :upcase]) #=> {name: {upcase: "BOB"}}
+```
 
-hash expressions can be grouped together
+Render the method from the array
+```ruby
+jobs = [Job.new(title: "doctor"), Job.new(title: "driver")]
+user = User.new("bob", 20, jobs)
+user.render([jobs: [:title]]) #=> {jobs: [{title: "doctor"}, {title: "driver"}]}
+```
 
-    user.render({username: :name}, {hobby: "fishing"}) ==
-    user.render({username: :name, hobby: "fishing"})
+You can merge multiple hashes
+```ruby
+user = User.new("bob")
+user.render({username: :name}, {hobby: "fishing"}) ==
+user.render({username: :name, hobby: "fishing"})
+```
 
-render a custom key and value with lambda
-
-    name_with_age = ->(user){"#{user.name}(#{user.age})"}
-    user.render({name_with_age: name_with_age}) #=> {name_with_age: "bob(20)"}
-
-render nested hash from a method returns an array
-
-    user.render([jobs: [:title]])
-    #=> {jobs: [{title: "doctor"}, {title: "driver"}]}
-
-render with an array
-
-    RenderHash.render([user1, user2], :name) #=> [{name: "bob"}, {name: "tom"}]
+Render from arrays using the module
+```ruby
+users = [User.new("bob"), User.new("tom")]
+RenderHash.render(users, :name) #=> [{name: "bob"}, {name: "tom"}]
+```
 
 ## Contributing
 
