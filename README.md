@@ -1,7 +1,7 @@
 # RenderHash
 
 RenderHash is an alternative to .as_json in rails providing simple syntax to
-generate nested hash from any ruby object.
+generate the hash from any ruby object.
 
 ## Installation
 
